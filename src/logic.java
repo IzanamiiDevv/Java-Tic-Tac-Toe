@@ -1,6 +1,7 @@
 package src;
 import java.util.Scanner;
 import java.util.Queue;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 
 public class logic {
@@ -27,21 +28,26 @@ public class logic {
     public static void playerMove(Scanner scanner, char[] table, char player) {
         System.out.println("Your Turn What is Your Next Move?");
         System.out.print("[+] ");
-        int move = scanner.nextInt();
-        scanner.nextLine();
-        while(move <= 0 || move >= table.length || table[move] != ' ') {
-            System.out.println("Track has Occupied Choose another Location!");
-            System.out.print("[+] ");
+        
+        int move = -1;
+        boolean validInput = false;
+        
+        do {
             try {
                 move = scanner.nextInt();
                 scanner.nextLine();
-            } catch (Exception e) {
+                if (move > 0 && move <= table.length && table[move - 1] == ' ') {
+                    validInput = true;
+                } else {
+                    System.out.println("Track is occupied or invalid. Choose another location!");
+                    System.out.print("[+] ");
+                }
+            } catch (InputMismatchException e) {
                 System.out.println("Input must be a number between 1 - 9");
                 System.out.print("[+] ");
-                move = scanner.nextInt();
                 scanner.nextLine();
             }
-        }
+        } while (!validInput);
 
         table[move - 1] = player;
     }

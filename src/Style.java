@@ -36,10 +36,18 @@ public class Style {
         public static final String WHITE_BACKGROUND = "\033[47m";  // WHITE
     }
 
+    /**
+     * This Function Allow You to Change the Style of Your Text
+     * @param color
+     */
     public static void SetColor(String color) {
         System.out.print(color);
     }
 
+    /**
+     * This Function Allow You to Clear the Style of Your Text
+     * @param none
+     */
     public static void ClearColor() {
         System.out.print(RESET);
     }
