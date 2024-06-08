@@ -20,12 +20,11 @@ class Program extends logic {
             req.nextLine();
         }while(!(player == 'X' || player == 'O'));
 
-        char computer = player == 'X' ? 'O':'X';
-
         Random rand = new Random();
         int random = rand.nextInt(0,2);
         boolean isFirst = random == 1;
-        
+
+        ComputerAI computer = new ComputerAI(player == 'X' ? 'O':'X');    
         if(isFirst) generateTable(table);
         boolean isRunning = true;
         while (isRunning) {

@@ -13,8 +13,35 @@ public class logic {
 
     protected static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
     protected static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
+
+    protected static class ComputerAI {
+
+        public char computer;
+        public int moved;
+
+        public ComputerAI(char computer) {
+            this.computer = computer;
+        }
+        
+        protected void calculateTurn(){
+            ArrayList<Integer> available = new ArrayList<Integer>();
+            for (char move : table) {
+                if(!(move == 'X' || move == 'O')) {
+                    available.add(Character.getNumericValue(move) - 1);
+                }
+            }
+
+            Random rand = new Random();
+            int position = available.get(rand.nextInt(0, available.size()));
+
+            this.moved = position;
+
+            table[position] = computer;
+            computerMoveTracker.offer(position);
+        }
+    }
     
-    public static void generateTable(char[] track) {
+    protected static void generateTable(char[] track) {
         String[] moves = new String[track.length];
         
         for (int i = 0; i < track.length; i++) moves[i] = String.valueOf(track[i]);
@@ -38,7 +65,7 @@ public class logic {
         System.out.println("+-------+-------+-------+");
     }
 
-    public static void playerMove(Scanner scanner, char player) {
+    protected static void playerMove(Scanner scanner, char player) {
         if(playerMoveTracker.size() == 3) System.out.println("Next Move you will  Lose: " + (playerMoveTracker.peek() + 1));
 
         if(computerMoveTracker.size() == 3) System.out.println("Next Move Computer will  Lose: " + (computerMoveTracker.peek() + 1));
@@ -75,30 +102,18 @@ public class logic {
         }
     }
 
-    public static void computerMove(char computer) {
-        ArrayList<Integer> available = new ArrayList<Integer>();
-        for (char move : table) {
-            if(!(move == 'X' || move == 'O')) {
-                available.add(Character.getNumericValue(move) - 1);
-            }
-        }
-
-        Random rand = new Random();
-        int position = available.get(rand.nextInt(0, available.size()));
-
-        table[position] = computer;
-        computerMoveTracker.offer(position);
-
+    protected static void computerMove(ComputerAI computer) {
+        computer.calculateTurn();
         if(computerMoveTracker.size() == 4) {
             int temp = computerMoveTracker.poll();
             table[temp] = Integer.toString(temp + 1).charAt(0);
         }
 
         generateTable(table);
-        System.out.println("Computer Choosed: " + (position + 1));
+        System.out.println("Computer Choosed: " + (computer.moved + 1));
     }
 
-    public static boolean checkWinner(char[] spaces,char player) {
+    protected static boolean checkWinner(char[] spaces,char player) {
         int[][] pattern = {
             {0,1,2},
             {3,4,5},
