@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 import src.logic;
 
-class Program {
+class Program extends logic {
     public static void main(String[] args) {
         Scanner req = new Scanner(System.in);
         System.out.println("What is your Name?");
@@ -12,11 +12,17 @@ class Program {
 
         char player;
         do {
+            System.out.println("Choose Your Character (X/O)?");
+            System.out.print("[+] ");
             player = req.next().charAt(0);
+            req.nextLine();
         }while(!(player == 'X' || player == 'O'));
-        req.close();
+
         char computer = player == 'X' ? 'O':'X';
-        char[] moves = {player,computer,' ',' ',' ',' ',' ',' ',' '};
-        logic.generateTable(moves);
+
+        char[] moves = {' ',' ',' ',' ',' ',' ',' ',' ',' '};
+
+        generateTable(moves);
+        checkWinner(moves, player);
     }
 }
