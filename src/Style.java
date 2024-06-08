@@ -51,4 +51,8 @@ public class Style {
     public static void ClearColor() {
         System.out.print(RESET);
     }
+
+    public static String ChangeColor(String txt ,String color) {
+        return color + txt + RESET;
+    }
 }

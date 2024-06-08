@@ -1,5 +1,6 @@
 package src;
 import java.util.Scanner;
+import src.Style.Colors;
 import java.util.Queue;
 import java.util.Random;
 import java.util.InputMismatchException;
@@ -13,23 +14,35 @@ public class logic {
     protected static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
     protected static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
     
-    public static void generateTable(char[] moves) {
+    public static void generateTable(char[] track) {
+        String[] moves = new String[track.length];
+        
+        for (int i = 0; i < track.length; i++) moves[i] = String.valueOf(track[i]);
+
+        if(playerMoveTracker.size() == 3) moves[playerMoveTracker.peek()] = Style.ChangeColor(moves[playerMoveTracker.peek()], Colors.RED);
+
+        if (computerMoveTracker.size() == 3) moves[computerMoveTracker.peek()] = Style.ChangeColor(moves[computerMoveTracker.peek()], Colors.RED);
+
         System.out.println("+-------+-------+-------+");
         System.out.println("|       |       |       |");
-        System.out.println(String.format("|   %c   |   %c   |   %c   |",moves[0],moves[1],moves[2]));
+        System.out.println(String.format("|   %s   |   %s   |   %s   |",moves[0],moves[1],moves[2]));
         System.out.println("|       |       |       |");
         System.out.println("+-------+-------+-------+");
         System.out.println("|       |       |       |");
-        System.out.println(String.format("|   %c   |   %c   |   %c   |",moves[3],moves[4],moves[5]));
+        System.out.println(String.format("|   %s   |   %s   |   %s   |",moves[3],moves[4],moves[5]));
         System.out.println("|       |       |       |");
         System.out.println("+-------+-------+-------+");
         System.out.println("|       |       |       |");
-        System.out.println(String.format("|   %c   |   %c   |   %c   |",moves[6],moves[7],moves[8]));
+        System.out.println(String.format("|   %s   |   %s   |   %s   |",moves[6],moves[7],moves[8]));
         System.out.println("|       |       |       |");
         System.out.println("+-------+-------+-------+");
     }
 
     public static void playerMove(Scanner scanner, char player) {
+        if(playerMoveTracker.size() == 3) System.out.println("Next Move you will  Lose: " + (playerMoveTracker.peek() + 1));
+
+        if(computerMoveTracker.size() == 3) System.out.println("Next Move Computer will  Lose: " + (computerMoveTracker.peek() + 1));
+
         System.out.println("Your Turn What is Your Next Move?");
         System.out.print("[+] ");
         
@@ -65,7 +78,6 @@ public class logic {
     public static void computerMove(char computer) {
         ArrayList<Integer> available = new ArrayList<Integer>();
         for (char move : table) {
-            System.out.println(table);
             if(!(move == 'X' || move == 'O')) {
                 available.add(Character.getNumericValue(move) - 1);
             }
@@ -82,7 +94,6 @@ public class logic {
             table[temp] = Integer.toString(temp + 1).charAt(0);
         }
 
-        System.out.println(available);
         generateTable(table);
         System.out.println("Computer Choosed: " + (position + 1));
     }
@@ -108,8 +119,10 @@ public class logic {
 
             if(spaces[a] != ' ' && spaces[a] == spaces[b] && spaces[a] == spaces[c]) {
                 if(spaces[a] == player) {
+                    generateTable(spaces);
                     System.out.println("Player Won!");
                 }else {
+                    generateTable(spaces);
                     System.out.println("Computer Won!");
                 }
 

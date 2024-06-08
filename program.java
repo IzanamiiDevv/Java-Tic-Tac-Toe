@@ -22,12 +22,11 @@ class Program extends logic {
 
         char computer = player == 'X' ? 'O':'X';
 
-        generateTable(table);
-
         Random rand = new Random();
         int random = rand.nextInt(0,2);
         boolean isFirst = random == 1;
         
+        if(isFirst) generateTable(table);
         boolean isRunning = true;
         while (isRunning) {
             if(isFirst){
@@ -45,7 +44,5 @@ class Program extends logic {
                 isRunning = !checkWinner(table, player);
             }
         }
-
-        System.out.println(random);
     }
 }
