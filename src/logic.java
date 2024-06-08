@@ -6,8 +6,8 @@ import java.util.LinkedList;
 
 public class logic {
 
-    public static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
-    public static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
+    protected static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
+    protected static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
     
     public static void generateTable(char[] moves) {
         System.out.println("+-------+-------+-------+");
