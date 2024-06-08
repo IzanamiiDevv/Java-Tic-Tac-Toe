@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import src.Style;
 
 import src.logic;
 
@@ -22,7 +23,12 @@ class Program extends logic {
 
         char[] moves = {' ',' ',' ',' ',' ',' ',' ',' ',' '};
 
+        Style.SetColor(Style.Colors.RED);
+        System.out.println("Hello World");
+        Style.ClearColor();
+
         generateTable(moves);
+        playerMove(req, moves, player);
         checkWinner(moves, player);
     }
 }

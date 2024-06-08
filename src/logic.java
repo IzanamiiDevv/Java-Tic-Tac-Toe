@@ -24,8 +24,26 @@ public class logic {
         System.out.println("+-------+-------+-------+");
     }
 
-    public static void playerMove(Scanner scanner, char[] table) {
+    public static void playerMove(Scanner scanner, char[] table, char player) {
+        System.out.println("Your Turn What is Your Next Move?");
+        System.out.print("[+] ");
+        int move = scanner.nextInt();
+        scanner.nextLine();
+        while(move <= 0 || move >= table.length || table[move] != ' ') {
+            System.out.println("Track has Occupied Choose another Location!");
+            System.out.print("[+] ");
+            try {
+                move = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Input must be a number between 1 - 9");
+                System.out.print("[+] ");
+                move = scanner.nextInt();
+                scanner.nextLine();
+            }
+        }
 
+        table[move - 1] = player;
     }
 
     public static void computerMove(char[] table) {
