@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 import src.Style;
 
@@ -21,14 +22,30 @@ class Program extends logic {
 
         char computer = player == 'X' ? 'O':'X';
 
-        char[] moves = {' ',' ',' ',' ',' ',' ',' ',' ',' '};
+        generateTable(table);
 
-        Style.SetColor(Style.Colors.RED);
-        System.out.println("Hello World");
-        Style.ClearColor();
+        Random rand = new Random();
+        int random = rand.nextInt(0,2);
+        boolean isFirst = random == 1;
+        
+        boolean isRunning = true;
+        while (isRunning) {
+            if(isFirst){
+                playerMove(req, player);
+                isRunning = !checkWinner(table, player);
+                if(!isRunning) break;
+                computerMove(computer);
+                isRunning = !checkWinner(table, player);
+                
+            } else {
+                computerMove(computer);
+                isRunning = !checkWinner(table, player);
+                if(!isRunning) break;
+                playerMove(req, player);
+                isRunning = !checkWinner(table, player);
+            }
+        }
 
-        generateTable(moves);
-        playerMove(req, moves, player);
-        checkWinner(moves, player);
+        System.out.println(random);
     }
 }
