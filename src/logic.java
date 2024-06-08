@@ -1,13 +1,13 @@
 package src;
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class logic {
 
-    public static ArrayList<Integer> playerMoveTracker = new ArrayList<Integer>();
-    public static ArrayList<Integer> computerMoveTracker = new ArrayList<Integer>();
-
-
+    public static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
+    public static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
+    
     public static void generateTable(char[] moves) {
         System.out.println("+-------+-------+-------+");
         System.out.println("|       |       |       |");
@@ -25,7 +25,7 @@ public class logic {
     }
 
     public static void playerMove(Scanner scanner, char[] table) {
-        
+
     }
 
     public static void computerMove(char[] table) {
