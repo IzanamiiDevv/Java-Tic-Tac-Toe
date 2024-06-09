@@ -6,24 +6,31 @@ import java.util.Random;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class logic {
 
     protected static char[] table = {'1','2','3','4','5','6','7','8','9'};
 
-    protected static Queue<Integer> playerMoveTracker = new LinkedList<Integer>();
+    protected static Queue<Integer> playerMoveTracker = new LinkedList<>();
     protected static Queue<Integer> computerMoveTracker = new LinkedList<Integer>();
 
     protected static class ComputerAI {
 
         public char computer;
         public int moved;
+        public String difficulty;
+        public static int playerMove;
+        public int recentMove;
+        private static ArrayList<Integer> playerMoves = new ArrayList<>();
 
-        public ComputerAI(char computer) {
+        public ComputerAI(char computer, String difficulty) {
             this.computer = computer;
+            this.difficulty = difficulty;
         }
         
         protected void calculateTurn(){
+            //Get Available Moves
             ArrayList<Integer> available = new ArrayList<Integer>();
             for (char move : table) {
                 if(!(move == 'X' || move == 'O')) {
@@ -31,14 +38,82 @@ public class logic {
                 }
             }
 
-            Random rand = new Random();
-            int position = available.get(rand.nextInt(0, available.size()));
+            int position = -1;
+
+            if(difficulty == "easy"){
+                Random rand = new Random();
+                position = available.get(rand.nextInt(0, available.size()));
+            }else {
+                position = calculateADVTurn(available, table);
+            }
 
             this.moved = position;
 
             table[position] = computer;
             computerMoveTracker.offer(position);
         }
+
+        private int calculateADVTurn(ArrayList<Integer> moves, char[] spaces) {
+            int playerRecentMove = playerMove;
+            int playerWillLost = -1;
+            if(playerMoveTracker.size() > 3) playerWillLost = playerMoveTracker.peek();
+            int[][] pattern = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
+            if(playerWillLost != -1) playerMoves.removeFirst();
+            playerMoves.add(playerRecentMove);
+
+            ArrayList<int[]> enemyPossiblemoves = filterSubArrays(pattern, playerMoves);
+            ArrayList<Integer> shouldIGo = calculate(enemyPossiblemoves, moves);
+
+            if(shouldIGo.isEmpty()){
+                Random rand = new Random();
+                return moves.get(rand.nextInt(0, moves.size()));
+            }
+
+            Random rand = new Random();
+            return shouldIGo.get(rand.nextInt(0, shouldIGo.size()));
+        }
+
+        private ArrayList<int[]> filterSubArrays(int[][] x, ArrayList<Integer> y) {
+            ArrayList<int[]> z = new ArrayList<>();
+            outerLoop:
+            for (int[] subArray : x) {
+                for (int value : y) {
+                    boolean contains = false;
+                    for (int element : subArray) {
+                        if (element == value) {
+                            contains = true;
+                            break;
+                        }
+                    }
+                    if (!contains) {
+                        continue outerLoop;
+                    }
+                }
+                z.add(subArray);
+            }
+            
+            return z;
+        }
+
+        private ArrayList<Integer> calculate(ArrayList<int[]> possiblemove, ArrayList<Integer> available) {
+            HashSet<Integer> temp = new HashSet<>();
+            ArrayList<Integer> result = new ArrayList<>();
+            
+            possiblemove.forEach((int[] items) -> {
+                for(int item : items) {
+                    temp.add(item);
+                }
+            });
+            
+            for (Integer number : available) {
+
+                if (temp.contains(number)) {
+                    result.add(number);
+                }
+            }
+            return result;
+        }
+        
     }
     
     protected static void generateTable(char[] track) {
@@ -95,10 +170,12 @@ public class logic {
 
         table[move - 1] = player;
         playerMoveTracker.offer(move - 1);
+        ComputerAI.playerMove = move - 1;
 
         if(playerMoveTracker.size() == 4) {
             int temp = playerMoveTracker.poll();
             table[temp] = Integer.toString(temp + 1).charAt(0);
+            
         }
     }
 
@@ -140,11 +217,9 @@ public class logic {
                     generateTable(spaces);
                     System.out.println("Computer Won!");
                 }
-
                 return true;
             }
         }
-
         return false;
     }
 }
