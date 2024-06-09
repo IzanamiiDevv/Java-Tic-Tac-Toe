@@ -22,7 +22,7 @@ class Program extends logic {
 
         Random rand = new Random();
         int random = rand.nextInt(0,2);
-        boolean isFirst = true; // random == 1
+        boolean isFirst = random == 1;
 
         ComputerAI computer = new ComputerAI(player == 'X' ? 'O':'X', "hard");    
         if(isFirst) generateTable(table);
